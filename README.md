@@ -1,9 +1,12 @@
 stylecow plugin variables
 =========================
 
-Stylecow plugin to work with variables using standard var() function, (more info: http://dev.w3.org/csswg/css-variables/). For global variables (available in all properties), you have to define them in the selectors :root or html. Use nested rules to create scoped variables.
+Stylecow plugin to work with variables using the standard `var()`, [available in CSS Custom Properties for Cascading Variables Module Level 1](http://www.w3.org/TR/css-variables-1/).
 
-Sintax:
+For global variables (available in all properties), you have to define them in the selectors `:root` or `html`. Use nested rules to create scoped variables.
+
+Syntax:
+
 ```
 var(varname [, default])
 ```
