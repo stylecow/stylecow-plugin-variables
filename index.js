@@ -4,22 +4,23 @@ module.exports = function (stylecow) {
 		//Use var() function
 		"Function": {
 			var: function (fn) {
-				var arguments = fn.content;
-				var value = fn.ancestor('Rule').getData(arguments[0]) || arguments[1];
+				var arguments = fn.getValue();
+				var value = fn.ancestor({type: 'Rule'}).getData(arguments[0]) || arguments[1];
 
 				if (value) {
 					fn.replaceWith(value);
 				}
+
 			}
 		},
 
 		//Save new --variables
 		Declaration: function (declaration) {
 			if (declaration.name.indexOf('--') === 0) {
-				var rule = declaration.ancestor('Rule');
+				var rule = declaration.ancestor({type: 'Rule'});
 
-				if (rule.hasChild('Selector', [':root', 'html'])) {
-					rule.ancestor('Root').setData(declaration.name, declaration.value);
+				if (rule.hasChild({type: 'Selector', string: [':root', 'html']})) {
+					rule.ancestor({type: 'Root'}).setData(declaration.name, declaration.value);
 				} else {
 					rule.setData(declaration.name, declaration.value);
 				}
