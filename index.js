@@ -4,8 +4,8 @@ module.exports = function (stylecow) {
 		//Use var() function
 		"Function": {
 			var: function (fn) {
-				var arguments = fn.getValue();
-				var value = fn.ancestor({type: 'Rule'}).getData(arguments[0]) || arguments[1];
+				var arguments = fn.getContent();
+				var value = fn.parent({type: 'Rule'}).getData(arguments[0]) || arguments[1];
 
 				if (value) {
 					fn.replaceWith(value);
@@ -17,10 +17,10 @@ module.exports = function (stylecow) {
 		//Save new --variables
 		Declaration: function (declaration) {
 			if (declaration.name.indexOf('--') === 0) {
-				var rule = declaration.ancestor({type: 'Rule'});
+				var rule = declaration.parent({type: 'Rule'});
 
 				if (rule.hasChild({type: 'Selector', string: [':root', 'html']})) {
-					rule.ancestor({type: 'Root'}).setData(declaration.name, declaration.value);
+					rule.parent({type: 'Root'}).setData(declaration.name, declaration.value);
 				} else {
 					rule.setData(declaration.name, declaration.value);
 				}
