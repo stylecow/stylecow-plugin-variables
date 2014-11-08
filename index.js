@@ -1,16 +1,24 @@
 module.exports = function (stylecow) {
 
 	stylecow.addTask({
+
 		//Use var() function
 		"Function": {
 			var: function (fn) {
 				var arguments = fn.getContent();
-				var value = fn.parent({type: 'Rule'}).getData(arguments[0]) || arguments[1];
+				var value = fn.parent({type: 'Rule'}).getData(arguments[0]);
 
 				if (value) {
-					fn.replaceWith(value);
+					if (fn.parent().is({type: ['Value', 'Argument']}) && (value.length > 1)) {
+						return fn.parent().setContent(value);
+					}
+
+					return fn.replaceWith(value.join(' '));
 				}
 
+				if (arguments[1]) {
+					fn.replaceWith(arguments[1]);
+				}
 			}
 		},
 
@@ -22,7 +30,7 @@ module.exports = function (stylecow) {
 				if (rule.hasChild({type: 'Selector', string: [':root', 'html']})) {
 					rule.parent({type: 'Root'}).setData(declaration.name, declaration.value);
 				} else {
-					rule.setData(declaration.name, declaration.value);
+					rule.setData(declaration.name, declaration.getContent());
 				}
 
 				declaration.remove();
