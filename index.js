@@ -28,7 +28,7 @@ module.exports = function (stylecow) {
 				var rule = declaration.parent({type: 'Rule'});
 
 				if (rule.hasChild({type: 'Selector', string: [':root', 'html']})) {
-					rule.parent({type: 'Root'}).setData(declaration.name, declaration.value);
+					rule.parent({type: 'Root'}).setData(declaration.name, declaration.getContent());
 				} else {
 					rule.setData(declaration.name, declaration.getContent());
 				}
