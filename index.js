@@ -9,7 +9,6 @@ module.exports = function (stylecow) {
 				var value = fn.parent({type: 'Rule'}).getData(arguments[0]);
 
 				if (value) {
-					console.log(value);
 					if (fn.parent().is({type: ['Value', 'Argument']}) && (value.length > 1)) {
 						return fn.parent().setContent(value.join(','));
 					}
