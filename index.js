@@ -7,19 +7,18 @@ module.exports = function (stylecow) {
 			name: 'var'
 		},
 		fn: function (fn) {
-			var value = fn.parent({type: 'Rule'}).getData(fn[0].toString());
+			var value = fn.parent('Rule').getData(fn[0].toString());
 
 			if (value) {
-				var parent = fn.parent();
-				var index = fn.index();
-				fn.remove();
+				var val = fn.parent('Value');
+				var parent = val.parent();
+				var index = val.index();
+				val.remove();
 
 				value.forEach(function (v, i) {
 					parent.splice(index + i, 0, v.clone());
 				});
-			}
-
-			if (fn[1]) {
+			} else if (fn[1]) {
 				fn.replaceWith(fn[1]);
 			}
 		}
@@ -33,11 +32,18 @@ module.exports = function (stylecow) {
 		},
 		fn: function (declaration) {
 			if (declaration.name.indexOf('--') === 0) {
-				var rule = declaration.parent({type: 'Rule'});
+				var rule = declaration.parent('Rule');
 				var value = declaration.detach();
 
-				if (rule.firstChild({type: 'Selectors'}).hasChild({type: 'Selector', string: [':root', 'html']})) {
-					rule.parent({type: 'Root'}).setData(declaration.name, value);
+				if (
+					rule
+					.firstChild('Selectors')
+					.hasChild({
+						type: 'Selector', 
+						string: [':root', 'html']
+					})
+				) {
+					rule.parent('Root').setData(declaration.name, value);
 				} else {
 					rule.setData(declaration.name, value);
 				}
