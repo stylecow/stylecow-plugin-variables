@@ -10,16 +10,9 @@ module.exports = function (stylecow) {
 			var value = fn.parent('Rule').getData(fn[0].toString());
 
 			if (value) {
-				var val = fn.parent('Value');
-				var parent = val.parent();
-				var index = val.index();
-				val.remove();
-
-				value.forEach(function (v, i) {
-					parent.splice(index + i, 0, v.clone());
-				});
+				replace(fn, value.clone());
 			} else if (fn[1]) {
-				fn.replaceWith(fn[1]);
+				replace(fn, fn[1].clone());
 			}
 		}
 	});
@@ -50,4 +43,23 @@ module.exports = function (stylecow) {
 			}
 		}
 	});
+
+	function replace (fn, values) {
+		var value = values.shift();
+		var first = value.shift();
+
+		fn.replaceWith(first);
+
+		value.forEach(function (child) {
+			first.after(child);
+		});
+
+		var parent = fn.parent();
+
+		if (parent && parent.is('Value')) {
+			values.forEach(function (child) {
+				parent.after(child);
+			});
+		}
+	}
 };
