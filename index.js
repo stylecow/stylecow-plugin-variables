@@ -45,21 +45,20 @@ module.exports = function (stylecow) {
 	});
 
 	function replace (fn, values) {
+		var parent = fn.parent();
 		var value = values.shift();
 		var first = value.shift();
-
+		
 		fn.replaceWith(first);
 
-		value.forEach(function (child) {
-			first.after(child);
-		});
-
-		var parent = fn.parent();
+		while (value.length) {
+			first.after(value.pop());
+		}
 
 		if (parent && parent.is('Value')) {
-			values.forEach(function (child) {
-				parent.after(child);
-			});
+			while (values.length) {
+				parent.after(values.pop());
+			}
 		}
 	}
 };
