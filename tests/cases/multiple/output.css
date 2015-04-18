@@ -1,0 +1,7 @@
+:root {
+	
+}
+div {
+	border: solid 1px red;
+	background: url("image.png"), url("image2.png");
+}

@@ -1,0 +1,16 @@
+:root {
+	--main-color: red;
+}
+
+div {
+	color: var(--main-color);
+}
+
+div {
+	--main-color: blue;
+	color: var(--main-color);
+}
+
+div {
+	background: var(--secondary-color, yellow) no-repeat;
+}

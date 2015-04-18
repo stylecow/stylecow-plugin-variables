@@ -7,7 +7,7 @@ module.exports = function (stylecow) {
 			name: 'var'
 		},
 		fn: function (fn) {
-			var value = fn.parent('Rule').getData(fn[0].toString());
+			var value = fn.getData(fn[0].toString());
 
 			if (value) {
 				replace(fn, value.clone());
@@ -25,40 +25,39 @@ module.exports = function (stylecow) {
 		},
 		fn: function (declaration) {
 			if (declaration.name.indexOf('--') === 0) {
-				var rule = declaration.parent('Rule');
-				var value = declaration.detach();
+				var rule = declaration.getParent('Rule');
 
 				if (
 					rule
-					.firstChild('Selectors')
+					.getChild('Selectors')
 					.hasChild({
-						type: 'Selector', 
+						type: 'Selector',
 						string: [':root', 'html']
 					})
 				) {
-					rule.parent('Root').setData(declaration.name, value);
+					rule.getParent('Root').setData(declaration.name, declaration.detach());
 				} else {
-					rule.setData(declaration.name, value);
+					rule.setData(declaration.name, declaration.detach());
 				}
 			}
 		}
 	});
 
 	function replace (fn, values) {
-		var parent = fn.parent();
-		var value = values.shift();
-		var first = value.shift();
-		
-		fn.replaceWith(first);
+		var parent = fn.getParent();
 
-		while (value.length) {
-			first.after(value.pop());
-		}
-
-		if (parent && parent.is('Value')) {
+		if (parent && parent.type === 'Value' && parent.length === 1) {
 			while (values.length) {
 				parent.after(values.pop());
 			}
+
+			parent.detach();
+		} else {
+			while (values.length) {
+				fn.after(values.pop());
+			}
+
+			fn.detach();
 		}
 	}
 };

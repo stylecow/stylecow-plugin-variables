@@ -1,13 +1,19 @@
 {
 	"name": "stylecow-plugin-variables",
 	"description": "Stylecow plugin to work with variables using standard var() function",
-	"version": "3.0.0",
+	"version": "4.0.0",
 	"author": "Oscar Otero <oom@oscarotero.com>",
 	"homepage": "https://github.com/stylecow/stylecow-plugin-variables",
 	"bugs": "https://github.com/stylecow/stylecow-plugin-variables/issues",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/stylecow/stylecow-plugin-variables.git"
+	},
+	"devDependencies": {
+		"stylecow-parser": "2.*"
+	},
+	"scripts": {
+		"test": "mocha tests/cases.js"
 	},
 	"main": "index.js",
 	"license": "MIT"

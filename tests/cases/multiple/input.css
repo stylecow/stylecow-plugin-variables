@@ -1,0 +1,9 @@
+:root {
+	--border: solid 1px red;
+	--backgrounds: url('image.png'), url('image2.png');
+}
+
+div {
+	border: var(--border);
+	background: var(--backgrounds);
+}
