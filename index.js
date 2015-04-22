@@ -7,12 +7,16 @@ module.exports = function (stylecow) {
 			name: 'var'
 		},
 		fn: function (fn) {
-			var value = fn.getData(fn[0].toString());
+			var name = fn.get('ExtensionName');
 
-			if (value) {
-				replace(fn, value.clone());
-			} else if (fn[1]) {
-				replace(fn, fn[1].clone());
+			if (name) {
+				var value = fn.getData('@var-' + name.name);
+
+				if (value) {
+					replace(fn, value.clone());
+				} else if (fn[1]) {
+					replace(fn, fn[1].clone());
+				}
 			}
 		}
 	});
@@ -26,6 +30,7 @@ module.exports = function (stylecow) {
 		fn: function (declaration) {
 			if (declaration.name.indexOf('--') === 0) {
 				var rule = declaration.getParent('Rule');
+				var name = '@var-' + declaration.name.substr(2);
 
 				if (
 					rule
@@ -35,9 +40,9 @@ module.exports = function (stylecow) {
 						string: [':root', 'html']
 					})
 				) {
-					rule.getParent('Root').setData(declaration.name, declaration.detach());
+					rule.getParent('Root').setData(name, declaration.detach());
 				} else {
-					rule.setData(declaration.name, declaration.detach());
+					rule.setData(name, declaration.detach());
 				}
 			}
 		}
