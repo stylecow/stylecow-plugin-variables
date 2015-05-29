@@ -51,7 +51,7 @@ module.exports = function (stylecow) {
 	function replace (fn, values) {
 		var parent = fn.getParent();
 
-		if (parent && parent.type === 'Value' && parent.length === 1) {
+		if (values.type === 'Declaration' && parent && parent.type === 'Value' && parent.length === 1) {
 			while (values.length) {
 				parent.after(values.pop());
 			}

@@ -1,0 +1,7 @@
+div {
+	color: var(--color, red);
+}
+div {
+	--color: blue;
+	color: var(--color);
+}
