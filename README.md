@@ -1,4 +1,7 @@
-# stylecow plugin variables
+stylecow plugin variables
+=========================
+
+[![Build Status](https://travis-ci.org/stylecow/stylecow-plugin-variables.svg)](https://travis-ci.org/stylecow/stylecow-plugin-variables)
 
 Stylecow plugin to work with variables using the standard `var()`, [available in CSS Custom Properties for Cascading Variables Module Level 1](http://www.w3.org/TR/css-variables-1/).
 
