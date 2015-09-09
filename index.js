@@ -31,7 +31,7 @@ module.exports = function (stylecow) {
 		},
 		fn: function (declaration) {
 			if (declaration.name.indexOf('--') === 0) {
-				let rule = declaration.getParent('Rule');
+				let rule = declaration.getAncestor('Rule');
 				let name = '@var-' + declaration.name.substr(2);
 
 				if (
@@ -42,7 +42,7 @@ module.exports = function (stylecow) {
 						string: [':root', 'html']
 					})
 				) {
-					rule.getParent('Root').setData(name, declaration.detach());
+					rule.getAncestor('Root').setData(name, declaration.detach());
 				} else {
 					rule.setData(name, declaration.detach());
 				}
