@@ -10,7 +10,7 @@ module.exports = function (stylecow) {
 			var name = fn.get('ExtensionName');
 
 			if (name) {
-				var value = fn.getData('@var-' + name.name);
+				let value = fn.getData('@var-' + name.name);
 
 				if (value) {
 					replace(fn, value.clone());
@@ -29,8 +29,8 @@ module.exports = function (stylecow) {
 		},
 		fn: function (declaration) {
 			if (declaration.name.indexOf('--') === 0) {
-				var rule = declaration.getParent('Rule');
-				var name = '@var-' + declaration.name.substr(2);
+				let rule = declaration.getParent('Rule');
+				let name = '@var-' + declaration.name.substr(2);
 
 				if (
 					rule
