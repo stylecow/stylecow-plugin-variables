@@ -2,6 +2,29 @@
 
 module.exports = function (tasks) {
 
+    //Save new --variables
+    tasks.addTask({
+        filter: 'CustomProperty',
+        position: 'before',
+        fn: function (property) {
+            let rule = property.getAncestor('Rule');
+            let name = '@var-' + property.name;
+
+            if (
+                rule
+                .getChild('Selectors')
+                .hasChild({
+                    type: 'Selector',
+                    string: [':root', 'html']
+                })
+            ) {
+                rule.getAncestor('Root').setData(name, property.detach());
+            } else {
+                rule.setData(name, property.detach());
+            }
+        }
+    });
+
     //Use var() function
     tasks.addTask({
         filter: {
@@ -15,43 +38,47 @@ module.exports = function (tasks) {
                 let value = fn.getData('@var-' + name.name);
 
                 if (value) {
-                    replace(fn, value.clone());
+                    replace(fn, value.clone(true));
                 } else if (fn[1]) {
-                    replace(fn, fn[1].clone());
+                    replace(fn, fn[1].clone(true));
                 }
             }
         }
     });
 
-
-    //Save new --variables
+    //Use @apply
     tasks.addTask({
-        filter: 'Declaration',
-        fn: function (declaration) {
-            if (declaration.name.indexOf('--') === 0) {
-                let rule = declaration.getAncestor('Rule');
-                let name = '@var-' + declaration.name.substr(2);
+        filter: {
+            type: 'AtRule',
+            name: 'apply'
+        },
+        fn: function (apply) {
+            var name = apply.get('ExtensionName');
 
-                if (
-                    rule
-                    .getChild('Selectors')
-                    .hasChild({
-                        type: 'Selector',
-                        string: [':root', 'html']
-                    })
-                ) {
-                    rule.getAncestor('Root').setData(name, declaration.detach());
-                } else {
-                    rule.setData(name, declaration.detach());
+            if (name) {
+                let value = apply.getData('@var-' + name.name);
+
+                if (value) {
+                    let block = value.getChild('Block');
+
+                    if (!block) {
+                        return tasks.log('Invalid custom property: ' + apply.toString(), apply);
+                    }
+
+                    block.forEach(node => apply.before(node.clone(true)));
+
+                    apply.detach();
                 }
             }
         }
     });
+
+
 
     function replace (fn, values) {
         var parent = fn.getParent();
 
-        if (values.type === 'Declaration' && parent && parent.type === 'Value' && parent.length === 1) {
+        if (values.type === 'CustomProperty' && parent && parent.type === 'Value' && parent.length === 1) {
             while (values.length) {
                 parent.after(values.pop());
             }

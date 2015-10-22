@@ -1,0 +1,29 @@
+:root {
+	--color: blue;
+	--dark-color: color(var(--color) blackness(+3));
+	--button: {
+		border: solid 1px var(--color, red);
+		background: white;
+		color: var(--dark-color);
+	};
+	--big-button: {
+		@apply --button;
+		padding: 1em;
+	}
+}
+
+.button {
+	@apply --button;
+}
+
+.black-button {
+	--color: black;
+	@apply --button;
+}
+.big-button {
+	@apply --big-button;
+}
+.big-yellow-button {
+	--color: yellow;
+	@apply --big-button;
+}
