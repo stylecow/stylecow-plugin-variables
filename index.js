@@ -31,6 +31,16 @@ module.exports = function (tasks) {
             type: 'Function',
             name: 'var'
         },
+        forBrowsersLowerThan: {
+            firefox: 31,
+            chrome: 49,
+            safari: 9.1,
+            ios: 9.3,
+            exporer: false,
+            android: false,
+            edge: false,
+            opera: false
+        },
         fn: function (fn) {
             var name = fn.get('ExtensionName');
 
