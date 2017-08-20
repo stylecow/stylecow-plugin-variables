@@ -36,7 +36,7 @@ module.exports = function (tasks) {
             chrome: 49,
             safari: 9.1,
             ios: 9.3,
-            exporer: false,
+            explorer: false,
             android: 56,
             edge: 15,
             opera: 36
