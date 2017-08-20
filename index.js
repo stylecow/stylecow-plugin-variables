@@ -6,21 +6,30 @@ module.exports = function (tasks) {
     tasks.addTask({
         filter: 'CustomProperty',
         position: 'before',
+        forBrowsersLowerThan: {
+            firefox: 31,
+            chrome: 49,
+            safari: 9.1,
+            ios: 9.3,
+            explorer: false,
+            android: 56,
+            edge: 15,
+            opera: 36
+        },
         fn: function (property) {
-            let rule = property.getAncestor('Rule');
-            let name = '@var-' + property.name;
+            if (property[0] && !property[0].is('Block')) {
+                save(property);
+            }
+        }
+    });
 
-            if (
-                rule
-                .getChild('Selectors')
-                .hasChild({
-                    type: 'Selector',
-                    string: [':root', 'html']
-                })
-            ) {
-                rule.getAncestor('Root').setData(name, property.detach());
-            } else {
-                rule.setData(name, property.detach());
+    //Save new block --variables
+    tasks.addTask({
+        filter: 'CustomProperty',
+        position: 'before',
+        fn: function (property) {
+            if (property[0] && property[0].is('Block')) {
+                save(property);
             }
         }
     });
@@ -86,7 +95,7 @@ module.exports = function (tasks) {
 
 
     function replace (fn, values) {
-        var parent = fn.getParent();
+        const parent = fn.getParent();
 
         if (values.type === 'CustomProperty' && parent && parent.type === 'Value' && parent.length === 1) {
             while (values.length) {
@@ -100,6 +109,24 @@ module.exports = function (tasks) {
             }
 
             fn.detach();
+        }
+    }
+
+    function save(property) {
+        const rule = property.getAncestor('Rule');
+        const name = '@var-' + property.name;
+
+        if (
+            rule
+            .getChild('Selectors')
+            .hasChild({
+                type: 'Selector',
+                string: [':root', 'html']
+            })
+        ) {
+            rule.getAncestor('Root').setData(name, property.detach());
+        } else {
+            rule.setData(name, property.detach());
         }
     }
 };
