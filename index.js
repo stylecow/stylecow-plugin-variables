@@ -37,9 +37,9 @@ module.exports = function (tasks) {
             safari: 9.1,
             ios: 9.3,
             exporer: false,
-            android: false,
-            edge: false,
-            opera: false
+            android: 56,
+            edge: 15,
+            opera: 36
         },
         fn: function (fn) {
             var name = fn.get('ExtensionName');
